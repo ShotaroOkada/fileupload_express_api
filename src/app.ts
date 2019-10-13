@@ -10,24 +10,28 @@ admin.initializeApp({
     databaseURL: 'https://react-upload-file.firebaseio.com/'
 })
 
-const db = admin.database();
-const ref = db.ref();
+export const db = admin.database();
 
-
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
     res.send('hello world')
-    ref.on("value", response => {
+    db.ref('username').ref.on("value", response => {
     console.log(response.val());
     }, 
-    function(errorObject) {
+    errorObject => {
     console.log("The read failed: " + errorObject.code);
     });
 });
 
 app.get('/hoge', hogeController)
 
+app.get('/put', (req, res) => {
+    db.ref().update({
+        puttest: 'hoge'
+      });
+})
+
 app.listen(portNumber, () => {
-    console.log('listen on port 3000')
+    console.log(`listen on port ${portNumber}`)
 })
 
 export default app;
