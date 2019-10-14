@@ -1,9 +1,9 @@
 import Express from 'express';
 import * as admin from 'firebase-admin'
-import hogeController from './controller/hogeController';
+import { getFilesController, postFilesController } from './controller/filesController';
 
 const app = Express();
-const portNumber = 3000;
+const portNumber = 3001;
 
 admin.initializeApp({
     credential: admin.credential.applicationDefault(),
@@ -14,7 +14,7 @@ export const db = admin.database();
 
 app.get('/', (_req, res) => {
     res.send('hello world')
-    db.ref('username').ref.on("value", response => {
+    db.ref('files').ref.on("value", response => {
     console.log(response.val());
     }, 
     errorObject => {
@@ -22,13 +22,10 @@ app.get('/', (_req, res) => {
     });
 });
 
-app.get('/hoge', hogeController)
+app.get('/files', getFilesController);
 
-app.get('/put', (req, res) => {
-    db.ref().update({
-        puttest: 'hoge'
-      });
-})
+app.post('/files', postFilesController);
+
 
 app.listen(portNumber, () => {
     console.log(`listen on port ${portNumber}`)
