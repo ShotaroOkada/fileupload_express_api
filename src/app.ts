@@ -1,16 +1,12 @@
 import Express from 'express';
-import * as admin from 'firebase-admin'
-import { getFilesController, postFilesController } from './controller/filesController';
+import { db } from './firebase';
+import { getDatabaseController } from './controller/database/getDatabaseContller';
+import { postDatabaseController } from './controller/database/postDatabaseController';
+import { postStorageController } from './controller/storage/postStorageController'
 
 const app = Express();
 const portNumber = 3001;
 
-admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
-    databaseURL: 'https://react-upload-file.firebaseio.com/'
-})
-
-export const db = admin.database();
 
 app.get('/', (_req, res) => {
     res.send('hello world')
@@ -22,9 +18,11 @@ app.get('/', (_req, res) => {
     });
 });
 
-app.get('/files', getFilesController);
+app.get('/files', getDatabaseController);
 
-app.post('/files', postFilesController);
+app.post('/files', postDatabaseController);
+
+app.get('/storage', postStorageController);
 
 
 app.listen(portNumber, () => {
