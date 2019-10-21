@@ -2,11 +2,17 @@ import Express from 'express';
 import { db } from './firebase';
 import { getDatabaseController } from './controller/database/getDatabaseContller';
 import { postDatabaseController } from './controller/database/postDatabaseController';
-import { postStorageController } from './controller/storage/postStorageController'
+import { postStorageController } from './controller/storage/postStorageController';
 
 const app = Express();
-const portNumber = 3001;
+const portNumber = 8000;
 
+// CORSを許可する
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
 
 app.get('/', (_req, res) => {
     res.send('hello world')

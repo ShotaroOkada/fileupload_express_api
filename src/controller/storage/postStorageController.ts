@@ -11,14 +11,12 @@ export function postStorageController(req: Request, res: Response, next: NextFun
             console.log(error.message);
         } else {
             console.log('success storage post');
-
+            
             // storageに画像をアップロードできた場合は、そのURLをrealtime databaseに保存する
             const STORAGE_ROOT = "https://firebasestorage.googleapis.com/v0/b";
             const bucketName = bucket.name;
             const dlPath = encodeURIComponent(uploadFilePath);
             const dlURL = `${STORAGE_ROOT}/${bucketName}/o/${dlPath}?alt=media`;
-
-            console.log(dlURL);
 
             db.ref('files').push().set(dlURL , error => {
                 if(error) {
