@@ -1,8 +1,7 @@
 import Express from 'express';
 import { db } from './firebase';
 import { getDatabaseController } from './controller/database/getDatabaseContller';
-import { postDatabaseController } from './controller/database/postDatabaseController';
-import { postStorageController } from './controller/storage/postStorageController';
+import bodyParser from 'body-parser';
 
 const app = Express();
 const portNumber = 8000;
@@ -13,6 +12,9 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
+
+// post dataを受け取れるようにする
+app.use(bodyParser.json());
 
 app.get('/', (_req, res) => {
     res.send('hello world')
@@ -26,9 +28,12 @@ app.get('/', (_req, res) => {
 
 app.get('/files', getDatabaseController);
 
-app.post('/files', postDatabaseController);
+// app.post('/files', postStorageController);
 
-app.get('/storage', postStorageController);
+app.post('/files', (req, res) => {
+  console.log(`body:${JSON.stringify(req.body)}`)
+  console.log(`query:${JSON.stringify(req.query)}`)
+})
 
 
 app.listen(portNumber, () => {
