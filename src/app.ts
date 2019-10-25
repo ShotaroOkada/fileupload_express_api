@@ -2,9 +2,12 @@ import Express from 'express';
 import { db } from './firebase';
 import { getDatabaseController } from './controller/database/getDatabaseContller';
 import bodyParser from 'body-parser';
+import { postStorageController } from './controller/storage/postStorageController';
+import multer from 'multer';
 
 const app = Express();
 const portNumber = 8000;
+const upload = multer({ dest: './uploads/' });
 
 // CORSを許可する
 app.use((req, res, next) => {
@@ -28,13 +31,7 @@ app.get('/', (_req, res) => {
 
 app.get('/files', getDatabaseController);
 
-// app.post('/files', postStorageController);
-
-app.post('/files', (req, res) => {
-  console.log(`body:${JSON.stringify(req.body)}`)
-  console.log(`query:${JSON.stringify(req.query)}`)
-})
-
+app.post('/files', upload.fields([ { name: 'Files' } ]), postStorageController);
 
 app.listen(portNumber, () => {
     console.log(`listen on port ${portNumber}`)

@@ -4,20 +4,17 @@ import { util } from "@google-cloud/common";
 
 // storageに画像をアップロードする
 export function postStorageController(req: Request, res: Response, next: NextFunction) {
-    let path = ''
+    const files: Express.Multer.File[] = req.files['Files']
     let uploadFilePath = ''
-    // queryの型を宣言
-    const query: { filePaths: string[] } = <{ filePaths: string[] }> req.query;
-    console.log(`query:${JSON.stringify(req.query)}`)
-    // console.log(`filePaths:${query.filePaths}`)
-    req.query.map(filePath =>{
-        console.log(`filePath:${filePath}`)
-        path = filePath
-        uploadFilePath = `files/${filePath}`
-        bucket.upload(path, {destination: uploadFilePath}, error => {
+    
+    files.forEach(fileInfo =>{
+        uploadFilePath = `files/${fileInfo.originalname}`
+        bucket.upload(fileInfo.path, {destination: uploadFilePath}, error => {
             if(error) {
                 console.log('failed storage post');
                 console.log(error.message);
+                res.sendStatus(404);
+                return;
             } else {
                 console.log('success storage post');
                 
@@ -30,6 +27,8 @@ export function postStorageController(req: Request, res: Response, next: NextFun
                 db.ref('files').push().set(dlURL , error => {
                     if(error) {
                         console.log('failed database fileURL post');
+                        res.sendStatus(404);
+                        return;
                     } else {
                         console.log('success database fileURL post');
                     }    
@@ -38,4 +37,5 @@ export function postStorageController(req: Request, res: Response, next: NextFun
             }    
         })
     })
+    return res.sendStatus(200);
 }
