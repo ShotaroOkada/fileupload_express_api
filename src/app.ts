@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import { postStorageController } from './controller/storage/postStorageController';
 import multer from 'multer';
 
+
 const app = Express();
 const portNumber = 8000;
 const upload = multer({ dest: './uploads/' });
@@ -21,7 +22,7 @@ app.use(bodyParser.json());
 
 app.get('/', (_req, res) => {
     res.send('hello world')
-    db.ref('files').ref.on("value", response => {
+    db.ref('files').ref.once("value", response => {
     console.log(response.val());
     }, 
     errorObject => {
