@@ -39,5 +39,9 @@ export function postStorageController(req: Request, res: Response, next: NextFun
             }
         })
     })
-    return res.sendStatus(200);
+    setTimeout(() => {
+        console.log('send 200')
+        return res.sendStatus(200);
+    }, 2000)
+    // return res.sendStatus(200);
 }

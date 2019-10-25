@@ -21,13 +21,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 app.get('/', (_req, res) => {
-    res.send('hello world')
-    db.ref('files').ref.once("value", response => {
-    console.log(response.val());
-    }, 
-    errorObject => {
-    console.log("The read failed: " + errorObject.code);
-    });
+    res.send('file upload api')
 });
 
 app.get('/files', getDatabaseController);
