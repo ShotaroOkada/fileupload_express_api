@@ -4,7 +4,6 @@ import { db } from '../../firebase';
 // dbに保存されたファイルURLを取得する
 export function getDatabaseController(req: Request, res: Response, next: NextFunction) {
     db.ref('files').ref.once("value", response => {
-        console.log('called getDB')
         console.log(response.val());
         res.send(response.val());
         }, 
